@@ -1,0 +1,85 @@
+base: user.com
+
+GET /users -> List<User> 200 OK
+POST /users { firstName: Jan, lastName: Kowalski } -> 201 CREATED Location: /users/1
+GET /users/1 -> User 200 OK
+
+GET /users/1/addresses -> List<Address> 200 OK
+POST /users/1/addresses { ... } -> 201 CREATED Location: /users/1/address/2
+GET /users/1/address/2 -> Address 200 OK
+
+DELETE /users/1 -> 204 NO CONTENT
+
+POST /users { firstName: Jan, lastName: Kowalski } -> id: 3
+POST /users { firstName: Jan, lastName: Kowalski } -> id: 4
+POST /users { firstName: Jan, lastName: Kowalski } -> id: 5
+POST /users { firstName: Jan, lastName: Kowalski } -> id: 6
+
+(Jan Kowalski istnieje w systemie)
+POST /users { firstName: Jan, lastName: Kowalski } -> 400 Bad Request { message: "User already exists" }
+
+POST /users { firstName: Jan, lastName: Kowalski } -> id: 3
+PUT /users/3 { lastName: Kowal } -> { id: 3, firstName: null, lastName: Kowal }
+PUT /users/7 { lastName: Kowal } -> { id: 7, firstName: null, lastName: Kowal }
+
+POST /users { firstName: Jan, lastName: Kowalski } -> id: 8
+PATCH /users/8 { lastName: Kowal } -> { id: 8, firstName: Jan, lastName: Kowal }
+PATCH /users/9 { lastName: Kowal } -> 404 NOT FOUND
+
+OPTIONS /users -> GET, POST
+
+/cart-management
+
+POST /cart-management/users/1/cart/pay
+POST /cart-management/users/1/cart/payments
+
+GET /users?firstName=Jan
+
+JSON
+-------------------------------------------------------------
+{
+    "firstName": "Jan",
+    "lastName": "Kowalski",
+    "phoneNumber": {
+        "type": "home",
+        "number": 111
+    },
+    "addresses": [
+        {
+            "street": "Piękna",
+            "city": "Wrocław"
+        },
+        {
+            "street": "Śliczna",
+            "city": "Wrocław"
+        }
+    ]
+}
+
+XML
+---------------------------------------------------------------
+<user>
+    <firstName>Jan</firstName>
+    <lastName>Kowalski</lastName>
+    <phoneNumber>
+        <type>home</type>
+        <number>111</number>
+    </phoneNumber>
+    <addresses>
+        <address street="Piękna" city="Wrocław"/>
+        <address street="Śliczna" city="Wrocław"/>
+    </addresses>
+</user>
+
+YAML
+----------------------------------------------------------------
+firstName: Jan
+lastName: Kowalski
+phoneNumber:
+    type: home
+    number: 111
+addresses:
+    -   street: Piękna
+        city: Wrocław
+    -   street: Śliczna
+        city: Wrocław
